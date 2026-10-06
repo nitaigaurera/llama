@@ -4,17 +4,9 @@
 # following structure.
 # Termux is the environment.
 # On a OnePlus Nord CE3 8GB.
-# llama/ folder is in $WORK.
-# With the following within.
-# build-static.sh,
-# build-shared.sh,
-# models/,
-# bin/.
-# The scripts do as is meant, models/ has
-# GGUF models and bin/ the binaries.
-# llama.cpp subfolder is also there while
-# cloning the sources within this script,
-# to be removed only.
+# llama/ folder is in $_DEV.
+# With this build.sh within.
+# _DEV/bin/llama is n $PATH.
 
 #TODO: Copy CMAKE_C_FLAGS to CMAKE_ASM_FLAGS
 #TODO: Add BUILD_MTMD and MTMD_VIDEO support
@@ -66,7 +58,7 @@ _e "$BASH_COMMAND [${PIPESTATUS[@]}]"
 
 _e() { echo -e "\e[31m$1\e[m" >&3; }
 
-test . -ef $WORK/llama
+test . -ef $_DEV/llama
 
 apt install -y git                        \
              cmake                        \
@@ -123,9 +115,12 @@ cmake -B build -G Ninja "${__[@]}"
 
 cmake --build build
 
-cd ..
-rm -rf bin
-mv -f llama.cpp/build/bin bin
+cd .. # beautify
+
+_P=$_DEV/bin/llama # beautify
+
+rm -rf $_P # move to separate sections
+mv -f llama.cpp/build/bin $_P # above?
 apt purge --autoremove -y git             \
                         cmake             \
                         ninja             \
